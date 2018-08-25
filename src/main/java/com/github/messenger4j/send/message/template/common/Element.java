@@ -20,15 +20,15 @@ public final class Element {
     private final String title;
     private final Optional<String> subtitle;
     private final Optional<URL> imageUrl;
-    private final Optional<DefaultAction> defaultAction;
+    private final Optional<Object> defaultAction;
     private final Optional<List<Button>> buttons;
 
     public static Element create(@NonNull String title, @NonNull Optional<String> subtitle, @NonNull Optional<URL> imageUrl,
-                                 @NonNull Optional<DefaultAction> defaultAction, @NonNull Optional<List<Button>> buttons) {
+                                 @NonNull Optional<Object> defaultAction, @NonNull Optional<List<Button>> buttons) {
         return new Element(title, subtitle, imageUrl, defaultAction, buttons);
     }
 
-    private Element(String title, Optional<String> subtitle, Optional<URL> imageUrl, Optional<DefaultAction> defaultAction,
+    private Element(String title, Optional<String> subtitle, Optional<URL> imageUrl, Optional<Object> defaultAction,
                     Optional<List<Button>> buttons) {
         this.title = title;
         this.subtitle = subtitle;
@@ -49,7 +49,7 @@ public final class Element {
         return imageUrl;
     }
 
-    public Optional<DefaultAction> defaultAction() {
+    public Optional<Object> defaultAction() {
         return defaultAction;
     }
 

@@ -30,6 +30,7 @@ public abstract class Button {
         PHONE_NUMBER,
         ELEMENT_SHARE,
         ACCOUNT_LINK,
-        ACCOUNT_UNLINK
+        ACCOUNT_UNLINK,
+        GAME_PLAY
     }
 }
