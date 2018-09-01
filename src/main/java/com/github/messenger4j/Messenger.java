@@ -119,6 +119,11 @@ public final class Messenger {
 
         return doRequest(POST, messagesRequestUrl, of(payload), MessageResponseFactory::create);
     }
+    public MessageResponse send(@NonNull String payload)
+            throws MessengerApiException, MessengerIOException {
+
+        return doRequest(POST, messagesRequestUrl, payload, MessageResponseFactory::create);
+    }
 
     public void onReceiveEvents(@NonNull String requestPayload, @NonNull Optional<String> signature,
                                 @NonNull Consumer<Event> eventHandler)
@@ -192,6 +197,29 @@ public final class Messenger {
         try {
             final Optional<String> jsonBody = payload.map(this.gson::toJson);
             final HttpResponse httpResponse = this.httpClient.execute(httpMethod, requestUrl, jsonBody.orElse(null));
+            final JsonObject responseJsonObject = this.jsonParser.parse(httpResponse.body()).getAsJsonObject();
+
+            if (responseJsonObject.size() == 0) {
+                throw new MessengerApiException("The response JSON does not contain any key/value pair",
+                        empty(), empty(), empty());
+            }
+
+            if (httpResponse.statusCode() >= 200 && httpResponse.statusCode() < 300) {
+                return responseTransformer.apply(responseJsonObject);
+            } else {
+                throw MessengerApiExceptionFactory.create(responseJsonObject);
+            }
+        } catch (IOException e) {
+            throw new MessengerIOException(e);
+        }
+    }
+
+    private <R> R doRequest(HttpMethod httpMethod, String requestUrl, String payload,
+                            Function<JsonObject, R> responseTransformer)
+            throws MessengerApiException, MessengerIOException {
+
+        try {
+            final HttpResponse httpResponse = this.httpClient.execute(httpMethod, requestUrl, payload);
             final JsonObject responseJsonObject = this.jsonParser.parse(httpResponse.body()).getAsJsonObject();
 
             if (responseJsonObject.size() == 0) {

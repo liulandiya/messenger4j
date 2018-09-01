@@ -32,8 +32,7 @@ public class InstantGameEventFactory implements BaseEventFactory<InstantGameEven
                 .orElseThrow(IllegalArgumentException::new);
         final String playerId = getPropertyAsString(messagingEvent, PROP_GAME_PLAY, PROP_PLAYER_ID)
                 .orElseThrow(IllegalArgumentException::new);
-        final String contextType = getPropertyAsString(messagingEvent, PROP_GAME_PLAY, PROP_CONTEXT_TYPE)
-                .orElseThrow(IllegalArgumentException::new);
+        final String contextType = getPropertyAsString(messagingEvent, PROP_GAME_PLAY, PROP_CONTEXT_TYPE).orElse("");
         final Optional<String> contextId = getPropertyAsString(messagingEvent, PROP_GAME_PLAY, PROP_CONTEXT_ID);
         final Optional<Integer> score = getPropertyAsInt(messagingEvent, PROP_GAME_PLAY, PROP_SCORE);
         final Optional<String> payload = getPropertyAsString(messagingEvent, PROP_GAME_PLAY, PROP_PAYLOAD);
