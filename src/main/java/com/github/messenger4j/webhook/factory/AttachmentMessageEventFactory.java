@@ -23,10 +23,7 @@ import static com.github.messenger4j.internal.gson.GsonUtil.getPropertyAsString;
 import static com.github.messenger4j.internal.gson.GsonUtil.hasProperty;
 
 import com.github.messenger4j.webhook.event.AttachmentMessageEvent;
-import com.github.messenger4j.webhook.event.attachment.Attachment;
-import com.github.messenger4j.webhook.event.attachment.FallbackAttachment;
-import com.github.messenger4j.webhook.event.attachment.LocationAttachment;
-import com.github.messenger4j.webhook.event.attachment.RichMediaAttachment;
+import com.github.messenger4j.webhook.event.attachment.*;
 import com.github.messenger4j.webhook.event.attachment.RichMediaAttachment.Type;
 import com.github.messenger4j.webhook.event.common.PriorMessage;
 import com.google.gson.JsonArray;
@@ -97,6 +94,9 @@ final class AttachmentMessageEventFactory implements BaseEventFactory<Attachment
                 case "FALLBACK":
                     final String json = attachmentJsonObject.toString();
                     attachments.add(new FallbackAttachment(json));
+                    break;
+                case "TEMPLATE":
+                    attachments.add(new UnknowAttachment(attachmentJsonObject));
                     break;
                 default:
                     throw new IllegalArgumentException("attachment type '" + type + "' is not supported");

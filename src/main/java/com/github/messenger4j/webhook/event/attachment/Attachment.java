@@ -32,4 +32,12 @@ public abstract class Attachment {
     public RichMediaAttachment asRichMediaAttachment() {
         throw new UnsupportedOperationException("not a RichMediaAttachment");
     }
+
+    public boolean isUnknowAttachment() {
+        return false;
+    }
+
+    public UnknowAttachment asUnknowAttachment() {
+        throw new UnsupportedOperationException("not a UnknowAttachment");
+    }
 }

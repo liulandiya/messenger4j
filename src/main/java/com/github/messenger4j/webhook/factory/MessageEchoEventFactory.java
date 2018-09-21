@@ -39,8 +39,7 @@ final class MessageEchoEventFactory implements BaseEventFactory<MessageEchoEvent
                 .orElseThrow(IllegalArgumentException::new);
         final String messageId = getPropertyAsString(messagingEvent, PROP_MESSAGE, PROP_MID)
                 .orElseThrow(IllegalArgumentException::new);
-        final String appId = getPropertyAsString(messagingEvent, PROP_MESSAGE, PROP_APP_ID)
-                .orElseThrow(IllegalArgumentException::new);
+        final String appId = getPropertyAsString(messagingEvent, PROP_MESSAGE, PROP_APP_ID).orElse("");
         final Optional<String> metadata = getPropertyAsString(messagingEvent, PROP_MESSAGE, PROP_METADATA);
 
         return new MessageEchoEvent(senderId, recipientId, timestamp, messageId, appId, metadata);
