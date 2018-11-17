@@ -2,11 +2,9 @@ package com.github.messenger4j;
 
 import com.github.messenger4j.spi.MessengerHttpClient;
 import java.io.IOException;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.*;
 
 /**
  * @author Max Grabenhorst
@@ -16,7 +14,12 @@ final class DefaultMessengerHttpClient implements MessengerHttpClient {
 
     private static final String APPLICATION_JSON_CHARSET_UTF_8 = "application/json; charset=utf-8";
 
-    private final OkHttpClient okHttp = new OkHttpClient();
+    private static final OkHttpClient OK_HTTP = new OkHttpClient.Builder()
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
+            .writeTimeout(5, TimeUnit.SECONDS)
+            .connectionPool(new ConnectionPool(20, 2, TimeUnit.MINUTES))
+            .build();
 
     @Override
     public HttpResponse execute(HttpMethod httpMethod, String url, String jsonBody) throws IOException {
@@ -27,7 +30,7 @@ final class DefaultMessengerHttpClient implements MessengerHttpClient {
             requestBuilder.method(httpMethod.name(), requestBody);
         }
         final Request request = requestBuilder.build();
-        try (Response response = this.okHttp.newCall(request).execute()) {
+        try (Response response = OK_HTTP.newCall(request).execute()) {
             return new HttpResponse(response.code(), response.body().string());
         }
     }
