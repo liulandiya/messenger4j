@@ -41,7 +41,7 @@ final class PostbackEventFactory implements BaseEventFactory<PostbackEvent> {
         final Instant timestamp = getPropertyAsInstant(messagingEvent, PROP_TIMESTAMP)
                 .orElseThrow(IllegalArgumentException::new);
         final String title = getPropertyAsString(messagingEvent, PROP_POSTBACK, PROP_TITLE)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElse("");
         final Optional<String> payload = getPropertyAsString(messagingEvent, PROP_POSTBACK, PROP_PAYLOAD);
         final Optional<Referral> referral = getPropertyAsJsonObject(messagingEvent, PROP_POSTBACK, PROP_REFERRAL)
                 .map(this::createReferralFromJson);
